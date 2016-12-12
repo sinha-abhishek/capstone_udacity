@@ -50,7 +50,13 @@
         </android.support.design.widget.TextInputLayout>
 
 
-
+        <TextView android:id="@+id/forgot_password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="@string/forgot_text"
+            android:gravity="center"
+            android:textSize="16sp"/>
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
@@ -67,7 +73,9 @@
             android:layout_marginBottom="24dp"
             android:text="@string/no_account_text"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:textSize="16sp"/>
+
+
 
     </LinearLayout>
 </ScrollView>
