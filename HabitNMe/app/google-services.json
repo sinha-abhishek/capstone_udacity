@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "851821929460",
+    "firebase_url": "https://habitnme.firebaseio.com",
+    "project_id": "habitnme",
+    "storage_bucket": "habitnme.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851821929460:android:c21f97f84b6dc640",
+        "android_client_info": {
+          "package_name": "com.abhishek.android.habitnme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "851821929460-pmsr21mr99n2k20uqhhl8mfpsjgndig4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKNgIIzrLg9Pq6GsOGPDtVcWp0u0wnnh4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

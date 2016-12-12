@@ -8,4 +8,13 @@
     <string name="create_text">Create Account</string>
     <string name="already_login_text">Already a member? Login</string>
     <string name="forgot_text">Forgot Password?</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="profile_string">Profile</string>
+    <string name="progress_string">Progress</string>
+    <string name="title_activity_goal_detail_view">GoalDetailView</string>
 </resources>

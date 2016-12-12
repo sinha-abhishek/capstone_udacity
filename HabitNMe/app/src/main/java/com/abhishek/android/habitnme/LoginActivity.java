@@ -66,6 +66,19 @@ public class LoginActivity extends NucleusAppCompatActivity<LoginPresenter> {
     }
 
     public void onLoginResult(boolean result) {
+        if (result) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
+    }
 
+    @OnClick(R.id.forgot_password)
+    public void onForgorPwdClick() {
+        String email = inputEmail.getText().toString();
+        if (email.length() == 0 ) {
+            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        getPresenter().forgotPasseord(email);
     }
 }
