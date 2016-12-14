@@ -25,7 +25,8 @@
         <activity
             android:name=".GoalDetailView"
             android:label="@string/title_activity_goal_detail_view"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AddHabitActivity"></activity>
     </application>
 
 </manifest>
