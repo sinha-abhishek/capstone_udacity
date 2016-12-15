@@ -6,6 +6,8 @@ import com.abhishek.android.habitnme.modules.DaggerDataComponent;
 import com.abhishek.android.habitnme.modules.DataComponent;
 import com.abhishek.android.habitnme.modules.DataModules;
 
+import io.realm.Realm;
+
 public class BaseApplication extends Application {
 
     public static DataComponent dataComponent;
@@ -15,6 +17,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         dataComponent = DaggerDataComponent.builder()
                 .dataModules(new DataModules(getApplicationContext())).build();
+        Realm.init(this);
     }
 
     public static DataComponent getDataComponent() {

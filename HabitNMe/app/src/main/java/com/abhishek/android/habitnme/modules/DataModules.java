@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.realm.RealmConfiguration;
 
 @Module
 public class DataModules {
@@ -26,5 +27,16 @@ public class DataModules {
     @Singleton
     public FirebaseAuth getFirebaseAuth() {
         return FirebaseAuth.getInstance();
+    }
+
+    @Provides
+    @Singleton
+    public RealmConfiguration getRealmConfiguration() {
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
+                .name("habitdb.realm")
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        return configuration;
     }
 }

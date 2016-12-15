@@ -27,6 +27,12 @@
             android:label="@string/title_activity_goal_detail_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AddHabitActivity"></activity>
+        <provider
+            android:name=".HabitDataProvider"
+            android:authorities="com.abhishek.android.habitnme.provider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:label="LentItemsProvider"/>
     </application>
 
 </manifest>
