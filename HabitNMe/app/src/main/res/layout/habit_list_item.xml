@@ -2,6 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_margin="10dp"
+    android:padding="5dp"
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -10,6 +14,7 @@
         card_view:cardCornerRadius="4dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_margin="10dp"
         android:padding="5dp"
         android:id="@+id/cardView">
         <LinearLayout
@@ -51,18 +56,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:orientation="vertical">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/selector1"
-                    android:alpha="0.5"
-                    android:src="@drawable/task_selector"
-                    />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:id="@+id/day1"
+                    android:background="@drawable/bg_untracked"
                     android:text="S"/>
             </LinearLayout>
             <LinearLayout
@@ -71,17 +71,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:orientation="vertical">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/task_selector"
-                    android:alpha="0.5"
-                    android:id="@+id/selector2"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:id="@+id/day2"
+                    android:background="@drawable/bg_untracked"
                     android:text="M"/>
             </LinearLayout>
             <LinearLayout
@@ -89,17 +85,14 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
+
                 android:orientation="vertical">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/task_selector"
-                    android:alpha="0.5"
-                    android:id="@+id/selector3"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@drawable/bg_untracked"
                     android:id="@+id/day3"
                     android:text="T"/>
             </LinearLayout>
@@ -109,17 +102,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:orientation="vertical">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/task_selector"
-                    android:alpha="0.5"
-                    android:id="@+id/selector4"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:id="@+id/day4"
+                    android:background="@drawable/bg_untracked"
                     android:text="W"/>
             </LinearLayout>
             <LinearLayout
@@ -128,17 +117,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:orientation="vertical">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/task_selector"
-                    android:alpha="0.5"
-                    android:id="@+id/selector5"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:id="@+id/day5"
+                    android:background="@drawable/bg_untracked"
                     android:text="T"/>
             </LinearLayout>
             <LinearLayout
@@ -147,17 +132,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:orientation="vertical">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/task_selector"
-                    android:alpha="0.5"
-                    android:id="@+id/selector6"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:id="@+id/day6"
+                    android:background="@drawable/bg_untracked"
                     android:text="F"/>
             </LinearLayout>
             <LinearLayout
@@ -166,17 +147,13 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:orientation="vertical">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/task_selector"
-                    android:alpha="0.5"
-                    android:id="@+id/selector7"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:id="@+id/day7"
+                    android:background="@drawable/bg_untracked"
                     android:text="S"/>
             </LinearLayout>
         </LinearLayout>
@@ -193,7 +170,7 @@
                     android:id="@+id/goal_edit"
                     style="@style/Base.TextAppearance.AppCompat.Body1"
                     android:textColor="#0F23E6"
-                    android:text = "djsdjhd"/>
+                    android:text = "@string/edit_habit"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -204,10 +181,27 @@
                     android:id="@+id/goal_progress"
                     android:textColor="#0F23E6"
                     style="@style/Base.TextAppearance.AppCompat.Body1"
-                    android:text = "x%"
+                    android:text = "@string/view_progress"
                     />
             </LinearLayout>
-        </LinearLayout>
+           <!-- <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/number_seeter"
+                android:visibility="visible"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set current number"
+                    />
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/goal_current_number"
+                    />
+            </LinearLayout>-->
+        </LinearLayout>-
 
     </android.support.v7.widget.CardView>
 

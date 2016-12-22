@@ -26,7 +26,7 @@ public class HabitDataProvider extends ContentProvider {
 
     public static final String NAME = "name";
     public static final String DATEADD = "dateAdded";
-    public static final String ID = "id";
+    public static final String ID = "_id";
     public static final String TYPE = "type";
     public static final String CATEGORY = "category";
     public static final String DESCRIPTION = "description";
@@ -67,12 +67,14 @@ public class HabitDataProvider extends ContentProvider {
             }
 
     public HabitDataProvider() {
-        BaseApplication.getDataComponent().inject(this);
+
     }
     @Override
     public boolean onCreate() {
         return true;
     }
+
+
 
     private Cursor toCursor(List<HabitModel> habitModels) {
         String[] columns = new String[] {ID, NAME, TYPE, DATEADD, CATEGORY, DESCRIPTION, MAX_ALLOWED, MIN_ALLOWED, TIMESAWEEK};
@@ -104,6 +106,9 @@ public class HabitDataProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        if (realmConfiguration == null) {
+            BaseApplication.getDataComponent().inject(this);
+        }
         Realm realm = Realm.getInstance(realmConfiguration);
         Cursor result = null;
         switch (uriMatcher.match(uri)) {

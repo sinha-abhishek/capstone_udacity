@@ -29,6 +29,12 @@
     <string name="number_habit_metric_hint">times/grams/minutes/steps</string>
     <string name="everday_text">Everyday</string>
     <string name="submit_text">Submit</string>
+    <string name="add_success">Habit created successfully</string>
+    <string name="edit_habit">Edit Habit</string>
+    <string name="view_progress">View Progress</string>
+    <string name="done_text">Done</string>
+    <string name="set_count">Set Count</string>
+    <string name="set_number_text">Set current number</string>
     <string-array name="category_array">
         <item>Health</item>
         <item>Fitness</item>
@@ -36,5 +42,24 @@
         <item>Reading</item>
         <item>Study</item>
         <item>Other</item>
+    </string-array>
+    <string-array name="yes_no_selector_array">
+        <item>I want to</item>
+        <item>I do not want to</item>
+    </string-array>
+    <string-array name="timesAWeek">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+    </string-array>
+    <string-array name="metric_selection_array">
+        <item>at least</item>
+        <item>at most</item>
+        <item>exactly</item>
+
     </string-array>
 </resources>

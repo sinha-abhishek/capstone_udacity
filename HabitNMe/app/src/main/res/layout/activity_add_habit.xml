@@ -208,7 +208,7 @@
             <!--</LinearLayout> -->
         </GridLayout>
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_submit"
+            android:id="@+id/btn_submit_habit"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

@@ -7,18 +7,24 @@ import io.realm.annotations.PrimaryKey;
 
 public class HabitModel extends RealmObject {
     @PrimaryKey
-    private String id;
+    private long id;
     private String name;
     private long dataAdded;
     private String category;
     private String description;
-    private String type;
-    private String timesAWeek;
-    private String minAllowed;
-    private String maxAllowed;
+    private int type;
+    private int timesAWeek;
+    private int minAllowed;
+    private int maxAllowed;
 
-    public HabitModel(String id, String category, String description, String maxAllowed,
-                      String minAllowed, String name, String timesAWeek, String type) {
+    public static final int YES_NO = 1;
+    public static final int NUMBER_BASED = 2;
+
+    public HabitModel() {
+    }
+
+    public HabitModel(long id, String category, String description, int maxAllowed,
+                      int minAllowed, String name, int timesAWeek, int type) {
         this.id = id;
         this.category = category;
         this.description = description;
@@ -37,11 +43,11 @@ public class HabitModel extends RealmObject {
         this.dataAdded = dataAdded;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -61,19 +67,19 @@ public class HabitModel extends RealmObject {
         this.description = description;
     }
 
-    public String getMaxAllowed() {
+    public int getMaxAllowed() {
         return maxAllowed;
     }
 
-    public void setMaxAllowed(String maxAllowed) {
+    public void setMaxAllowed(int maxAllowed) {
         this.maxAllowed = maxAllowed;
     }
 
-    public String getMinAllowed() {
+    public int getMinAllowed() {
         return minAllowed;
     }
 
-    public void setMinAllowed(String minAllowed) {
+    public void setMinAllowed(int minAllowed) {
         this.minAllowed = minAllowed;
     }
 
@@ -85,19 +91,19 @@ public class HabitModel extends RealmObject {
         this.name = name;
     }
 
-    public String getTimesAWeek() {
+    public int getTimesAWeek() {
         return timesAWeek;
     }
 
-    public void setTimesAWeek(String timesAWeek) {
+    public void setTimesAWeek(int timesAWeek) {
         this.timesAWeek = timesAWeek;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 }
