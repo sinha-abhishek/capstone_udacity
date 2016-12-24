@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="category_icons">
+        <item>@drawable/ic_hospital</item>
+        <item>@drawable/ic_carrot</item>
+        <item>@drawable/ic_cutlery</item>
+        <item>@drawable/ic_read</item>
+        <item>@drawable/ic_books</item>
+        <item>@drawable/ic_other</item>
+    </integer-array>
+
+</resources>

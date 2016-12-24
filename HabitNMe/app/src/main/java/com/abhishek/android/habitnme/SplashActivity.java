@@ -19,7 +19,9 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+
         startActivity(i);
+        finishAffinity();
 //        mAuth = FirebaseAuth.getInstance();
 //        mAuthListener = new FirebaseAuth.AuthStateListener() {
 //            @Override

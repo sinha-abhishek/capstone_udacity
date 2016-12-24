@@ -21,7 +21,7 @@
     <string name="select_type_string">Select type of habit \nYes/No - simple yes or no is success \n Number - Have x amount in a day</string>
     <string name="yes_no_text">Yes/No Habit</string>
     <string name="number_based_text">Number based</string>
-    <string name="add_habit_hint_yes_no">For ex: go to gym, eat sugar etc.</string>
+    <string name="add_habit_hint_yes_no">Habits can be tracked by simple yes no\nFor ex: go or don\'t go to gym, eat or avoid sugar etc.</string>
     <string name="times_a_week_string">times per week</string>
     <string name="i_want_to_text">I want to</string>
     <string name="action_verb_hint">ex. do/drink/eat/consume</string>
@@ -35,6 +35,10 @@
     <string name="done_text">Done</string>
     <string name="set_count">Set Count</string>
     <string name="set_number_text">Set current number</string>
+    <string name="set_number_text_example">Such habits require specific number.\\nFor ex: less than 2 cups of tea,eat veggies twice a day</string>
+    <string name="please_enter_name">Please enter habit name</string>
+    <string name="please_select">Please select one of options</string>
+    <string name="please_fill_fields">Please fill all the fields</string>
     <string-array name="category_array">
         <item>Health</item>
         <item>Fitness</item>
@@ -62,4 +66,5 @@
         <item>exactly</item>
 
     </string-array>
+
 </resources>

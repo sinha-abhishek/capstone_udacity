@@ -26,13 +26,19 @@
             android:name=".GoalDetailView"
             android:label="@string/title_activity_goal_detail_view"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AddHabitActivity"></activity>
+        <activity android:name=".AddHabitActivity" />
+
         <provider
             android:name=".HabitDataProvider"
             android:authorities="com.abhishek.android.habitnme.provider"
             android:exported="true"
             android:grantUriPermissions="true"
-            android:label="LentItemsProvider"/>
+            android:label="LentItemsProvider" />
+
+        <activity android:name=".ChooseCategoryActivity" />
+        <activity android:name=".TypeSelectionActivity" />
+        <activity android:name=".AddYNHabitActivity" />
+        <activity android:name=".AddNumberActivity"></activity>
     </application>
 
 </manifest>

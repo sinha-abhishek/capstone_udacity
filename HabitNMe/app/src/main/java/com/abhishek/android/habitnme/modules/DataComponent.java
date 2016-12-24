@@ -2,6 +2,7 @@ package com.abhishek.android.habitnme.modules;
 
 import com.abhishek.android.habitnme.HabitDataProvider;
 import com.abhishek.android.habitnme.LoginActivity;
+import com.abhishek.android.habitnme.adapters.CategoryListAdapter;
 import com.abhishek.android.habitnme.adapters.HabitLogAdapter;
 import com.abhishek.android.habitnme.presenters.AddHabitPresenter;
 import com.abhishek.android.habitnme.presenters.HomePagePresenter;
@@ -23,4 +24,5 @@ public interface DataComponent {
     void inject(AddHabitPresenter addHabitPresenter);
     void inject(HomePagePresenter homePagePresenter);
     void inject(HabitLogAdapter habitLogAdapter);
+    void inject(CategoryListAdapter categoryListAdapter);
 }

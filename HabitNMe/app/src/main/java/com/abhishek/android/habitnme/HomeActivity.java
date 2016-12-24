@@ -49,7 +49,7 @@ public class HomeActivity extends NucleusAppCompatActivity<HomePagePresenter>
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, AddHabitActivity.class);
+                Intent intent = new Intent(HomeActivity.this, ChooseCategoryActivity.class);
                 startActivity(intent);
 
             }
