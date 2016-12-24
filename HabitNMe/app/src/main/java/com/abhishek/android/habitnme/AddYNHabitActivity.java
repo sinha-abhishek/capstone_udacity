@@ -102,7 +102,7 @@ public class AddYNHabitActivity extends NucleusAppCompatActivity<AddHabitPresent
         int maxAllowed;
         String action = getResources().getStringArray(R.array.yes_no_selector_array)[0];
         timesAWeekToDo = numTimesAWeek;
-        description = yesNoAction + " " + yesNoHabitDescription.getText().toString();
+        description = yesNoAction + " " + yesNoHabitDescription.getText().toString() + " "+ numTimesAWeek + " "+getString(R.string.num_times_a_week_text);
         if (yesNoAction.equals(action)) {
             minAllowed = maxAllowed = 1;
         } else {

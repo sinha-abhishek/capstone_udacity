@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.abhishek.android.habitnme.BaseApplication;
 import com.abhishek.android.habitnme.HabitDataProvider;
@@ -94,23 +95,51 @@ public class HabitLogAdapter extends CursorAdapter {
                 @Override
                 public void onClick(View v) {
                     if (dayLog.getHabitModel().getType() == HabitModel.YES_NO) {
-                        realm.beginTransaction();
+                        final Dialog dialog = new Dialog(context);
+                        dialog.setContentView(R.layout.dialog_mark_done);
+                        dialog.setTitle(dayLog.getHabitModel().getName());
+                        final ToggleButton toggleButton = (ToggleButton) dialog.findViewById(R.id.toggle_done);
                         if (dayLog.getState() == HabitDayLog.STATE_SUCCESS) {
-                            dayLog.setState(HabitDayLog.STATE_MISSED);
+                            toggleButton.setChecked(true);
                         } else {
-                            dayLog.setState(HabitDayLog.STATE_SUCCESS);
+                            toggleButton.setChecked(false);
                         }
-                        realm.copyToRealmOrUpdate(dayLog);
-                        realm.commitTransaction();
-                        notifyDataSetChanged();
+                        //TextView title = (TextView) dialog.findViewById(R.id.goal_title);
+                        //title.setText(dayLog.getHabitModel().getName());
+                        TextView desc = (TextView) dialog.findViewById(R.id.goal_description) ;
+                        desc.setText(dayLog.getHabitModel().getDescription());
+                        AppCompatButton button = (AppCompatButton) dialog.findViewById(R.id.btn_setcount);
+                        button.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                realm.beginTransaction();
+                                if (toggleButton.isChecked()) {
+                                    dayLog.setState(HabitDayLog.STATE_SUCCESS);
+                                } else {
+                                    dayLog.setState(HabitDayLog.STATE_MISSED);
+                                }
+                                realm.copyToRealmOrUpdate(dayLog);
+                                realm.commitTransaction();
+                                notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        });
+                        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+                        int width = metrics.widthPixels;
+                        int height = metrics.heightPixels;
+                        dialog.getWindow().setLayout((5 * width)/7, (1 * height)/2);
+                        dialog.show();
+
                     } else {
                         final Dialog dialog = new Dialog(context);
                         dialog.setContentView(R.layout.dialog_set_count);
-                        dialog.setTitle(R.string.set_count);
+                        dialog.setTitle(dayLog.getHabitModel().getName());
                         final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.goal_current_number);
                         numberPicker.setMinValue(0);
                         numberPicker.setMaxValue(10000);
                         numberPicker.setValue(dayLog.getCount());
+                        TextView desc = (TextView) dialog.findViewById(R.id.goal_description) ;
+                        desc.setText(dayLog.getHabitModel().getDescription());
                         AppCompatButton button = (AppCompatButton) dialog.findViewById(R.id.btn_setcount);
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -138,7 +167,7 @@ public class HabitLogAdapter extends CursorAdapter {
                         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                         int width = metrics.widthPixels;
                         int height = metrics.heightPixels;
-                        dialog.getWindow().setLayout((5 * width)/7, (1 * height)/2);
+                        dialog.getWindow().setLayout((5 * width)/7, (4 * height)/5);
                         dialog.show();
                     }
                 }

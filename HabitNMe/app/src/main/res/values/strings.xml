@@ -39,6 +39,10 @@
     <string name="please_enter_name">Please enter habit name</string>
     <string name="please_select">Please select one of options</string>
     <string name="please_fill_fields">Please fill all the fields</string>
+    <string name="done_for_day_mark">Mark as done</string>
+    <string name="no_text">NO</string>
+    <string name="yes_text">YES</string>
+    <string name="num_times_a_week_text">times per week</string>
     <string-array name="category_array">
         <item>Health</item>
         <item>Fitness</item>
