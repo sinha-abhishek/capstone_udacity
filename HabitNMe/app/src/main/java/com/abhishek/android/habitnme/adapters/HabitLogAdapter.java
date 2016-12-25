@@ -24,6 +24,8 @@ import com.abhishek.android.habitnme.models.HabitModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,30 +56,30 @@ public class HabitLogAdapter extends CursorAdapter {
         return view;
     }
 
-    @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
-        ViewHolder holder = new ViewHolder(view);
-        TextView title = holder.goalName;
-        String titleText = cursor.getString(cursor.getColumnIndex(HabitDataProvider.NAME));
-        title.setText(titleText);
-        final Realm realm = Realm.getInstance(realmConfiguration);
-        int id = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.ID));
-        final int max = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.MAX_ALLOWED));
-        final int min = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.MIN_ALLOWED));
-        int type = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.TYPE));
-        int timesAweek = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.TIMESAWEEK));
-        final List<HabitDayLog> habitDayLogs = realm.where(HabitDayLog.class).equalTo("habitModel.id", id)
-                .findAllSorted("dayOfYear", Sort.DESCENDING);
-
-        List<HabitDayLog> last7Days = new ArrayList<>();
+    private void formRow(ViewHolder viewHolder, final long habitId, final int max, final int min, int type, int timesAWeek, final Context context) {
         int successCount = 0;
-
-        List<TextView> labels = holder.dayTexts;
-        for (int i = 0 ; i < 7 ; i++) {
-            final HabitDayLog dayLog = habitDayLogs.get(i);
-            final TextView label = labels.get(i);
-            label.setText(String.valueOf(habitDayLogs.get(i).getDd()));
-            switch (dayLog.getState()) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        List<TextView> labels = viewHolder.dayTexts;
+        final Realm realm = Realm.getInstance(realmConfiguration);
+        for (int i = 0 ; i <7 ; i++) {
+            TextView label = labels.get(i);
+            label.setText(String.valueOf(calendar.get(Calendar.DATE)));
+            List<HabitDayLog> dayLogs = realm.where(HabitDayLog.class).equalTo("habitModel.id", habitId).equalTo("yyyy", calendar.get(Calendar.YEAR))
+                    .equalTo("dayOfYear", calendar.get(Calendar.DAY_OF_YEAR)).findAll();
+            final HabitDayLog habitDayLog;
+            if (dayLogs.isEmpty()) {
+                realm.beginTransaction();
+                HabitModel habitModel = realm.where(HabitModel.class).equalTo("id", habitId).findFirst();
+                HabitDayLog newLog = new HabitDayLog(0, calendar.get(Calendar.DATE), habitModel,
+                        calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR), calendar.get(Calendar.DAY_OF_YEAR));
+                realm.copyToRealmOrUpdate(newLog);
+                realm.commitTransaction();
+                habitDayLog = newLog;
+            } else {
+                habitDayLog = dayLogs.get(0);
+            }
+            switch (habitDayLog.getState()) {
                 case HabitDayLog.STATE_UNTRACKED:
                     label.setBackground(context.getResources().getDrawable(R.drawable.bg_untracked));
                     break;
@@ -92,16 +94,15 @@ public class HabitLogAdapter extends CursorAdapter {
                     break;
 
             }
-            last7Days.add(habitDayLogs.get(i));
             label.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (dayLog.getHabitModel().getType() == HabitModel.YES_NO) {
+                    if (habitDayLog.getHabitModel().getType() == HabitModel.YES_NO) {
                         final Dialog dialog = new Dialog(context);
                         dialog.setContentView(R.layout.dialog_mark_done);
-                        dialog.setTitle(dayLog.getHabitModel().getName());
+                        dialog.setTitle(habitDayLog.getHabitModel().getName());
                         final ToggleButton toggleButton = (ToggleButton) dialog.findViewById(R.id.toggle_done);
-                        if (dayLog.getState() == HabitDayLog.STATE_SUCCESS) {
+                        if (habitDayLog.getState() == HabitDayLog.STATE_SUCCESS) {
                             toggleButton.setChecked(true);
                         } else {
                             toggleButton.setChecked(false);
@@ -109,19 +110,21 @@ public class HabitLogAdapter extends CursorAdapter {
                         //TextView title = (TextView) dialog.findViewById(R.id.goal_title);
                         //title.setText(dayLog.getHabitModel().getName());
                         TextView desc = (TextView) dialog.findViewById(R.id.goal_description) ;
-                        desc.setText(dayLog.getHabitModel().getDescription());
+                        desc.setText(habitDayLog.getHabitModel().getDescription());
                         AppCompatButton button = (AppCompatButton) dialog.findViewById(R.id.btn_setcount);
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                realm.beginTransaction();
+                                Realm realm1 = Realm.getInstance(realmConfiguration);
+                                realm1.beginTransaction();
                                 if (toggleButton.isChecked()) {
-                                    dayLog.setState(HabitDayLog.STATE_SUCCESS);
+                                    habitDayLog.setState(HabitDayLog.STATE_SUCCESS);
                                 } else {
-                                    dayLog.setState(HabitDayLog.STATE_MISSED);
+                                    habitDayLog.setState(HabitDayLog.STATE_MISSED);
                                 }
-                                realm.copyToRealmOrUpdate(dayLog);
-                                realm.commitTransaction();
+                                realm1.copyToRealmOrUpdate(habitDayLog);
+                                realm1.commitTransaction();
+                                realm1.close();
                                 notifyDataSetChanged();
                                 dialog.dismiss();
                             }
@@ -135,33 +138,35 @@ public class HabitLogAdapter extends CursorAdapter {
                     } else {
                         final Dialog dialog = new Dialog(context);
                         dialog.setContentView(R.layout.dialog_set_count);
-                        dialog.setTitle(dayLog.getHabitModel().getName());
+                        dialog.setTitle(habitDayLog.getHabitModel().getName());
                         final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.goal_current_number);
                         numberPicker.setMinValue(0);
                         numberPicker.setMaxValue(10000);
-                        numberPicker.setValue(dayLog.getCount());
+                        numberPicker.setValue(habitDayLog.getCount());
                         TextView desc = (TextView) dialog.findViewById(R.id.goal_description) ;
-                        desc.setText(dayLog.getHabitModel().getDescription());
+                        desc.setText(habitDayLog.getHabitModel().getDescription());
                         AppCompatButton button = (AppCompatButton) dialog.findViewById(R.id.btn_setcount);
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                realm.beginTransaction();
-                                dayLog.setCount(numberPicker.getValue());
-                                if (dayLog.getCount() > max) {
-                                    dayLog.setState(HabitDayLog.STATE_MISSED);
-                                } else if (min > 0 && dayLog.getCount() > min) {
-                                    dayLog.setState(HabitDayLog.STATE_SUCCESS);
+                                Realm realm1 = Realm.getInstance(realmConfiguration);
+                                realm1.beginTransaction();
+                                habitDayLog.setCount(numberPicker.getValue());
+                                if (habitDayLog.getCount() > max) {
+                                    habitDayLog.setState(HabitDayLog.STATE_MISSED);
+                                } else if (min > 0 && habitDayLog.getCount() > min) {
+                                    habitDayLog.setState(HabitDayLog.STATE_SUCCESS);
                                 }
                                 if (min == max) {
-                                    if (dayLog.getCount() == min) {
-                                        dayLog.setState(HabitDayLog.STATE_SUCCESS);
-                                    } else if (dayLog.getCount() > max) {
-                                        dayLog.setState(HabitDayLog.STATE_MISSED);
+                                    if (habitDayLog.getCount() == min) {
+                                        habitDayLog.setState(HabitDayLog.STATE_SUCCESS);
+                                    } else if (habitDayLog.getCount() > max) {
+                                        habitDayLog.setState(HabitDayLog.STATE_MISSED);
                                     }
                                 }
-                                realm.copyToRealmOrUpdate(dayLog);
-                                realm.commitTransaction();
+                                realm1.copyToRealmOrUpdate(habitDayLog);
+                                realm1.commitTransaction();
+                                realm1.close();
                                 notifyDataSetChanged();
                                 dialog.dismiss();
                             }
@@ -175,19 +180,162 @@ public class HabitLogAdapter extends CursorAdapter {
                 }
 
             });
-            holder.goalProgress.setOnClickListener(new View.OnClickListener() {
-                @Override
+
+
+            if (habitDayLog.getState() == HabitDayLog.STATE_SUCCESS) {
+                successCount++;
+            }
+            calendar.add(Calendar.DATE, -1);
+        }
+        realm.close();
+        viewHolder.goalProgress.setOnClickListener(new View.OnClickListener() {
+                            @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ProgressActivity.class);
-                    long id = dayLog.getHabitModel().getId();
+                    long id = habitId;
                     intent.putExtra("habitId", id);
                     context.startActivity(intent);
                 }
             });
-            if (dayLog.getState() == HabitDayLog.STATE_SUCCESS) {
-                successCount++;
-                continue;
-            }
+        float percent = ((float)successCount/timesAWeek)*100;
+        TextView goalPercent = viewHolder.goalPercent;
+        goalPercent.setText(String.valueOf(percent)+ "%");
+    }
+
+    @Override
+    public void bindView(View view, final Context context, Cursor cursor) {
+        ViewHolder holder = new ViewHolder(view);
+        TextView title = holder.goalName;
+        String titleText = cursor.getString(cursor.getColumnIndex(HabitDataProvider.NAME));
+        title.setText(titleText);
+        final Realm realm = Realm.getInstance(realmConfiguration);
+        int id = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.ID));
+        final int max = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.MAX_ALLOWED));
+        final int min = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.MIN_ALLOWED));
+        int type = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.TYPE));
+        int timesAweek = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.TIMESAWEEK));
+        final List<HabitDayLog> habitDayLogs = realm.where(HabitDayLog.class).equalTo("habitModel.id", id)
+                .findAllSorted("dayOfYear", Sort.DESCENDING);
+        formRow(holder, id,max, min, type, timesAweek, context);
+//        List<HabitDayLog> last7Days = new ArrayList<>();
+//        int successCount = 0;
+//
+//        List<TextView> labels = holder.dayTexts;
+//        for (int i = 0 ; i < 7 ; i++) {
+//            final HabitDayLog dayLog = habitDayLogs.get(i);
+//            final TextView label = labels.get(i);
+//            label.setText(String.valueOf(habitDayLogs.get(i).getDd()));
+//            switch (dayLog.getState()) {
+//                case HabitDayLog.STATE_UNTRACKED:
+//                    label.setBackground(context.getResources().getDrawable(R.drawable.bg_untracked));
+//                    break;
+//                case HabitDayLog.STATE_MISSED :
+//                    label.setBackground(context.getResources().getDrawable(R.drawable.bg_missed));
+//                    break;
+//                case HabitDayLog.STATE_SUCCESS :
+//                    label.setBackground(context.getResources().getDrawable(R.drawable.bg_done));
+//                    break;
+//                default:
+//                    label.setBackground(context.getResources().getDrawable(R.drawable.bg_untracked));
+//                    break;
+//
+//            }
+//            last7Days.add(habitDayLogs.get(i));
+//            label.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (dayLog.getHabitModel().getType() == HabitModel.YES_NO) {
+//                        final Dialog dialog = new Dialog(context);
+//                        dialog.setContentView(R.layout.dialog_mark_done);
+//                        dialog.setTitle(dayLog.getHabitModel().getName());
+//                        final ToggleButton toggleButton = (ToggleButton) dialog.findViewById(R.id.toggle_done);
+//                        if (dayLog.getState() == HabitDayLog.STATE_SUCCESS) {
+//                            toggleButton.setChecked(true);
+//                        } else {
+//                            toggleButton.setChecked(false);
+//                        }
+//                        //TextView title = (TextView) dialog.findViewById(R.id.goal_title);
+//                        //title.setText(dayLog.getHabitModel().getName());
+//                        TextView desc = (TextView) dialog.findViewById(R.id.goal_description) ;
+//                        desc.setText(dayLog.getHabitModel().getDescription());
+//                        AppCompatButton button = (AppCompatButton) dialog.findViewById(R.id.btn_setcount);
+//                        button.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                realm.beginTransaction();
+//                                if (toggleButton.isChecked()) {
+//                                    dayLog.setState(HabitDayLog.STATE_SUCCESS);
+//                                } else {
+//                                    dayLog.setState(HabitDayLog.STATE_MISSED);
+//                                }
+//                                realm.copyToRealmOrUpdate(dayLog);
+//                                realm.commitTransaction();
+//                                notifyDataSetChanged();
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+//                        int width = metrics.widthPixels;
+//                        int height = metrics.heightPixels;
+//                        dialog.getWindow().setLayout((5 * width)/7, (1 * height)/2);
+//                        dialog.show();
+//
+//                    } else {
+//                        final Dialog dialog = new Dialog(context);
+//                        dialog.setContentView(R.layout.dialog_set_count);
+//                        dialog.setTitle(dayLog.getHabitModel().getName());
+//                        final NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.goal_current_number);
+//                        numberPicker.setMinValue(0);
+//                        numberPicker.setMaxValue(10000);
+//                        numberPicker.setValue(dayLog.getCount());
+//                        TextView desc = (TextView) dialog.findViewById(R.id.goal_description) ;
+//                        desc.setText(dayLog.getHabitModel().getDescription());
+//                        AppCompatButton button = (AppCompatButton) dialog.findViewById(R.id.btn_setcount);
+//                        button.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                realm.beginTransaction();
+//                                dayLog.setCount(numberPicker.getValue());
+//                                if (dayLog.getCount() > max) {
+//                                    dayLog.setState(HabitDayLog.STATE_MISSED);
+//                                } else if (min > 0 && dayLog.getCount() > min) {
+//                                    dayLog.setState(HabitDayLog.STATE_SUCCESS);
+//                                }
+//                                if (min == max) {
+//                                    if (dayLog.getCount() == min) {
+//                                        dayLog.setState(HabitDayLog.STATE_SUCCESS);
+//                                    } else if (dayLog.getCount() > max) {
+//                                        dayLog.setState(HabitDayLog.STATE_MISSED);
+//                                    }
+//                                }
+//                                realm.copyToRealmOrUpdate(dayLog);
+//                                realm.commitTransaction();
+//                                notifyDataSetChanged();
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+//                        int width = metrics.widthPixels;
+//                        int height = metrics.heightPixels;
+//                        dialog.getWindow().setLayout((5 * width)/7, (4 * height)/5);
+//                        dialog.show();
+//                    }
+//                }
+//
+//            });
+//            holder.goalProgress.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(context, ProgressActivity.class);
+//                    long id = dayLog.getHabitModel().getId();
+//                    intent.putExtra("habitId", id);
+//                    context.startActivity(intent);
+//                }
+//            });
+//            if (dayLog.getState() == HabitDayLog.STATE_SUCCESS) {
+//                successCount++;
+//                continue;
+//            }
 
 //            if (type == HabitModel.NUMBER_BASED) {
 //                if(dayLog.getCount() <= max && dayLog.getCount() >= min) {
@@ -196,10 +344,10 @@ public class HabitLogAdapter extends CursorAdapter {
 //                }
 //            }
 
-        }
-        float percent = ((float)successCount/timesAweek)*100;
-        TextView goalPercent = holder.goalPercent;
-        goalPercent.setText(String.valueOf(percent)+ "%");
+//        }
+//        float percent = ((float)successCount/timesAweek)*100;
+//        TextView goalPercent = holder.goalPercent;
+//        goalPercent.setText(String.valueOf(percent)+ "%");
 
     }
 

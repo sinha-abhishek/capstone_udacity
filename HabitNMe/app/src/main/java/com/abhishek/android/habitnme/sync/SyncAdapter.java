@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
@@ -54,7 +55,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     .equalTo("yyyy", calendar.get(Calendar.YEAR)).equalTo("dayOfYear", calendar.get(Calendar.DAY_OF_YEAR)).findAll();
             if (habitLog.isEmpty()) {
                 HabitDayLog dayLog = realm.where(HabitDayLog.class).equalTo("habitModel.id", habitModel.getId())
-                        .findAllSorted("yyyy").sort("dayOfYear").first();
+                        .findAllSorted("yyyy", Sort.DESCENDING).sort("dayOfYear", Sort.DESCENDING).first();
                 Calendar last = Calendar.getInstance();
                 last.set(dayLog.getYyyy(), dayLog.getMm(), dayLog.getDd());
                 while (last.before(calendar)) {
