@@ -1,5 +1,8 @@
 package com.abhishek.android.habitnme;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -35,6 +38,16 @@ public class HomeActivity extends NucleusAppCompatActivity<HomePagePresenter>
         implements NavigationView.OnNavigationItemSelectedListener {
 
     HabitLogAdapter habitLogAdapter;
+
+    public static final String AUTHORITY = "com.abhishek.android.habitnme.provider";
+    // An authenticator type, in the form of a domain name
+    public static final String ACCOUNT_TYPE = "dummy.com";
+    // The authenticator name
+    public static final String ACCOUNT = "dummyaccount";
+
+    public static final long SYNC_INTERVAL = 30;
+    // Instance fields
+    Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +86,75 @@ public class HomeActivity extends NucleusAppCompatActivity<HomePagePresenter>
         lv.setAdapter(habitLogAdapter);
         getPresenter().initPresenter(this,  savedInstanceState);
 
+        mAccount = CreateSyncAccount(this);
+
+        ContentResolver.addPeriodicSync(
+                mAccount,
+                AUTHORITY,
+                Bundle.EMPTY,
+                SYNC_INTERVAL);
+
+        // Pass the settings flags by inserting them in a bundle
+        Bundle settingsBundle = new Bundle();
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        settingsBundle.putBoolean(
+                ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+        /*
+         * Request the sync for the default authenticator, authority, and
+         * manual sync settings
+         */
+        ContentResolver.requestSync(mAccount, AUTHORITY, settingsBundle);
+
     }
+
+
+    /**
+     * Create a new dummy authenticator for the sync adapter
+     *
+     * @param context The application context
+     */
+    public static Account CreateSyncAccount(Context context) {
+
+        // Create the authenticator type and default authenticator
+        Account newAccount = new Account(
+                context.getString(R.string.app_name), ACCOUNT_TYPE);
+        // Get an instance of the Android authenticator manager
+        AccountManager accountManager =
+                (AccountManager) context.getSystemService(
+                        ACCOUNT_SERVICE);
+        /*
+         * Add the authenticator and authenticator type, no password or user data
+         * If successful, return the Account object, otherwise report an error.
+         *
+         */
+        if (null == accountManager.getPassword(newAccount)) {
+            if (accountManager.addAccountExplicitly(newAccount, "", null)) {
+
+            /*
+             * If you don't set android:syncable="true" in
+             * in your <provider> element in the manifest,
+             * then call context.setIsSyncable(authenticator, AUTHORITY, 1)
+             * here.
+             */
+                ContentResolver.addPeriodicSync(newAccount,
+                        AUTHORITY,
+                        Bundle.EMPTY,
+                        30);
+
+                ContentResolver.setSyncAutomatically(newAccount, AUTHORITY, true);
+
+            } else {
+                return null;
+            /*
+             * The authenticator exists or some other error occurred. Log this, report it,
+             * or handle it internally.
+             */
+            }
+        }
+        return newAccount;
+    }
+
 
 //    @Override
 //    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
@@ -126,7 +207,10 @@ public class HomeActivity extends NucleusAppCompatActivity<HomePagePresenter>
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        if (id == R.id.nav_progress) {
+            Intent intent = new Intent(this, ProgressActivity.class);
+            startActivity(intent);
+        }
 //        if (id == R.id.nav_camera) {
 //            // Handle the camera action
 //        } else if (id == R.id.nav_gallery) {

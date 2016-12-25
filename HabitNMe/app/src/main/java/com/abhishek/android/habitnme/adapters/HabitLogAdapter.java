@@ -2,6 +2,7 @@ package com.abhishek.android.habitnme.adapters;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v7.widget.AppCompatButton;
@@ -16,6 +17,7 @@ import android.widget.ToggleButton;
 
 import com.abhishek.android.habitnme.BaseApplication;
 import com.abhishek.android.habitnme.HabitDataProvider;
+import com.abhishek.android.habitnme.ProgressActivity;
 import com.abhishek.android.habitnme.R;
 import com.abhishek.android.habitnme.models.HabitDayLog;
 import com.abhishek.android.habitnme.models.HabitModel;
@@ -173,6 +175,15 @@ public class HabitLogAdapter extends CursorAdapter {
                 }
 
             });
+            holder.goalProgress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ProgressActivity.class);
+                    long id = dayLog.getHabitModel().getId();
+                    intent.putExtra("habitId", id);
+                    context.startActivity(intent);
+                }
+            });
             if (dayLog.getState() == HabitDayLog.STATE_SUCCESS) {
                 successCount++;
                 continue;
@@ -214,6 +225,9 @@ public class HabitLogAdapter extends CursorAdapter {
 
         @BindView(R.id.goal_edit)
         TextView goalEdit;
+
+        @BindView(R.id.goal_progress)
+        TextView goalProgress;
 
         List<TextView> dayTexts = new ArrayList<>();
 

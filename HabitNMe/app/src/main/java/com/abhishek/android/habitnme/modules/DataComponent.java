@@ -7,7 +7,9 @@ import com.abhishek.android.habitnme.adapters.HabitLogAdapter;
 import com.abhishek.android.habitnme.presenters.AddHabitPresenter;
 import com.abhishek.android.habitnme.presenters.HomePagePresenter;
 import com.abhishek.android.habitnme.presenters.LoginPresenter;
+import com.abhishek.android.habitnme.presenters.ProgressPresenter;
 import com.abhishek.android.habitnme.presenters.RegisterPresenter;
+import com.abhishek.android.habitnme.sync.SyncAdapter;
 
 import javax.inject.Singleton;
 
@@ -25,4 +27,6 @@ public interface DataComponent {
     void inject(HomePagePresenter homePagePresenter);
     void inject(HabitLogAdapter habitLogAdapter);
     void inject(CategoryListAdapter categoryListAdapter);
+    void inject(ProgressPresenter progressPresenter);
+    void inject(SyncAdapter syncAdapter);
 }

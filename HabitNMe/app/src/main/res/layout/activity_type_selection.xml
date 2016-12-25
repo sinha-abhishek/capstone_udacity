@@ -27,7 +27,7 @@
         android:layout_weight="2"
         android:layout_margin="5dp"
         android:padding="10dp"
-        android:gravity="left"
+        android:gravity="start"
         style="@style/Base.TextAppearance.AppCompat.Body1"
         android:text="@string/add_habit_hint_yes_no"/>
     <android.support.v7.widget.AppCompatButton
@@ -45,7 +45,7 @@
         android:layout_weight="2"
         android:layout_margin="5dp"
         android:padding="10dp"
-        android:gravity="left"
+        android:gravity="start"
         style="@style/Base.TextAppearance.AppCompat.Body1"
         android:text="@string/set_number_text_example"/>
     </LinearLayout>

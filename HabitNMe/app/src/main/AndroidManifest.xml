@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.abhishek.android.habitnme">
 
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
+    <uses-permission
+        android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
@@ -31,14 +40,37 @@
         <provider
             android:name=".HabitDataProvider"
             android:authorities="com.abhishek.android.habitnme.provider"
-            android:exported="true"
+            android:exported="false"
+            android:syncable="true"
             android:grantUriPermissions="true"
             android:label="LentItemsProvider" />
+
+        <service
+            android:name="com.abhishek.android.habitnme.sync.SyncService"
+            android:exported="true"
+
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+        <service
+            android:name=".sync.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
 
         <activity android:name=".ChooseCategoryActivity" />
         <activity android:name=".TypeSelectionActivity" />
         <activity android:name=".AddYNHabitActivity" />
-        <activity android:name=".AddNumberActivity"></activity>
+        <activity android:name=".AddNumberActivity" />
+        <activity android:name=".ProgressActivity"/>
     </application>
 
 </manifest>
