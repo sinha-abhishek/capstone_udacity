@@ -37,6 +37,10 @@ public class WidgetRemoteViewService extends RemoteViewsService {
             public void onDataSetChanged() {
                 long identityToken = Binder.clearCallingIdentity();
                 Binder.restoreCallingIdentity(identityToken);
+                Realm realm = Realm.getInstance(Utils.getInstance().getRealmConfiguration());
+                List<HabitModel> habitModels = realm.where(HabitModel.class).findAllSorted("dataAdded");
+                allHabits = realm.copyFromRealm(habitModels);
+                realm.close();
             }
 
             @Override
