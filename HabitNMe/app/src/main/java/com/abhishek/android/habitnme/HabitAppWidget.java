@@ -111,9 +111,9 @@ public class HabitAppWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.habit_app_widget);
 
         Intent intent = new Intent(context, HomeActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-        views.setOnClickPendingIntent(R.layout.habit_app_widget, pendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.appwidget_text, pendingIntent);
+        //views.setOnClickPendingIntent(R.layout.habit_app_widget, pendingIntent);
 
         Intent svcIntent = new Intent(context, WidgetRemoteViewService.class);
         //passing app widget id to that RemoteViews Service

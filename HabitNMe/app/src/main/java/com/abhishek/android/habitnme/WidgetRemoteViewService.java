@@ -18,6 +18,8 @@ import javax.inject.Inject;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
+import static android.R.style.Widget;
+
 
 public class WidgetRemoteViewService extends RemoteViewsService {
     @Override
@@ -78,6 +80,9 @@ public class WidgetRemoteViewService extends RemoteViewsService {
                     isDone = true;
                 }
                 remoteViews.setTextViewText(R.id.widget_item_text, name);
+                Intent fillInIntent = new Intent();
+                //fillInIntent.putExtra(, position);
+                remoteViews.setOnClickFillInIntent(R.id.widget_item_text, fillInIntent);
                 //remoteViews.setTextColor();
                 return remoteViews;
             }
