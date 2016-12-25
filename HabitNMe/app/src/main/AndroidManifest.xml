@@ -2,14 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.abhishek.android.habitnme">
 
-    <uses-permission
-        android:name="android.permission.INTERNET"/>
-    <uses-permission
-        android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission
-        android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission
-        android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
     <application
         android:name=".BaseApplication"
@@ -41,26 +37,27 @@
             android:name=".HabitDataProvider"
             android:authorities="com.abhishek.android.habitnme.provider"
             android:exported="false"
-            android:syncable="true"
             android:grantUriPermissions="true"
-            android:label="LentItemsProvider" />
+            android:label="LentItemsProvider"
+            android:syncable="true" />
 
         <service
-            android:name="com.abhishek.android.habitnme.sync.SyncService"
+            android:name=".sync.SyncService"
             android:exported="true"
-
             android:process=":sync">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-        <service
-            android:name=".sync.AuthenticatorService">
+        <service android:name=".sync.AuthenticatorService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
@@ -70,7 +67,19 @@
         <activity android:name=".TypeSelectionActivity" />
         <activity android:name=".AddYNHabitActivity" />
         <activity android:name=".AddNumberActivity" />
-        <activity android:name=".ProgressActivity"/>
+        <activity android:name=".ProgressActivity" />
+
+        <receiver android:name=".HabitAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/habit_app_widget_info" />
+        </receiver>
+        <service android:name=".WidgetRemoteViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 
 </manifest>
