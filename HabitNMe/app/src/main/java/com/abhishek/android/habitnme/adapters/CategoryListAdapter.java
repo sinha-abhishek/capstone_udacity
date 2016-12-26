@@ -57,6 +57,7 @@ public class CategoryListAdapter extends BaseAdapter {
         }
         Integer img = context.getResources().obtainTypedArray(R.array.category_icons).getResourceId(position, -1);
         viewHolder.imageView.setImageResource(img);
+        viewHolder.imageView.setContentDescription(context.getResources().getStringArray(R.array.category_array)[position]);
         viewHolder.textView.setText(context.getResources().getStringArray(R.array.category_array)[position]);
         return convertView;
     }

@@ -72,6 +72,8 @@ public class HabitLogAdapter extends CursorAdapter {
         }
         for (int i = 0 ; i <7 ; i++) {
             TextView label = labels.get(i);
+            label.setFocusable(true);
+            label.setContentDescription(context.getString(R.string.set_done_for) + calendar.get(Calendar.DATE) );
             label.setText(String.valueOf(calendar.get(Calendar.DATE)));
             List<HabitDayLog> dayLogs = realm.where(HabitDayLog.class).equalTo("habitModel.id", habitId).equalTo("yyyy", calendar.get(Calendar.YEAR))
                     .equalTo("dayOfYear", calendar.get(Calendar.DAY_OF_YEAR)).findAll();

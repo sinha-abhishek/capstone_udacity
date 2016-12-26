@@ -11,10 +11,14 @@
         android:layout_height="wrap_content" android:orientation="vertical">
         <Spinner
             android:layout_width="match_parent"
+            android:contentDescription="@string/select_goal"
+            android:focusable="true"
             android:layout_height="wrap_content" android:id="@+id/goal_select_spinner"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:contentDescription="@string/month_view"
             android:id="@+id/calendar_fragment"/>
     </LinearLayout>
 </ScrollView>

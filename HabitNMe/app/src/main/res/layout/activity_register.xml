@@ -30,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
+                android:focusable="true"
                 android:hint="@string/name_text" />
         </android.support.design.widget.TextInputLayout>
 
@@ -43,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
+                android:focusable="true"
                 android:hint="@string/email_text" />
         </android.support.design.widget.TextInputLayout>
 
@@ -56,6 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:focusable="true"
                 android:hint="@string/password_text"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -67,6 +70,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
+            android:focusable="true"
             style="@style/Base.Widget.AppCompat.Button.Colored"
             android:text="@string/create_text"/>
 
@@ -75,6 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:text="@string/already_login_text"
+            android:focusable="true"
             android:gravity="center"
             android:textSize="16dip"/>
 

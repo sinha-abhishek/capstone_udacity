@@ -28,11 +28,14 @@
             android:layout_height="match_parent"
             style="@style/Base.TextAppearance.AppCompat.Body1"
             android:gravity="start|center"
+            android:focusable="true"
             android:text="@string/set_number_text"
             />
         <NumberPicker
             android:layout_width="0dp"
             android:layout_weight="0.25"
+            android:focusable="true"
+            android:contentDescription="@string/set_day_count"
             android:layout_height="match_parent"
             android:id="@+id/goal_current_number"
             />
@@ -43,10 +46,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
+        android:focusable="true"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
         android:padding="12dp"
         style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:contentDescription="@string/done_for_day_mark"
         android:text="@string/done_text"/>
     </LinearLayout>
 </ScrollView>

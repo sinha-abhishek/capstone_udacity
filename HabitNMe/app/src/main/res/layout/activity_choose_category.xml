@@ -9,6 +9,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
         android:id="@+id/choose_category_list"/>
 
 </android.support.constraint.ConstraintLayout>

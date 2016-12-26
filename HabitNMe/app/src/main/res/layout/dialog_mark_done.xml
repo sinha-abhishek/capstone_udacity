@@ -30,6 +30,7 @@
             style="@style/Base.TextAppearance.AppCompat.Body2"
             android:gravity="start|center"
             android:text="@string/done_for_day_mark"
+            android:focusable="true"
             />
         <ToggleButton
             android:layout_width="0dp"
@@ -38,6 +39,8 @@
             android:gravity="start|center"
             android:textOff="@string/no_text"
             android:textOn="@string/yes_text"
+            android:focusable="true"
+            android:contentDescription="@string/done_for_day_mark"
             android:id="@+id/toggle_done"/>
     </LinearLayout>
     <android.support.v7.widget.AppCompatButton
@@ -49,7 +52,9 @@
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:padding="12dp"
+        android:focusable="true"
         style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:contentDescription="@string/done_for_day_mark"
         android:text="@string/done_text"/>
     </LinearLayout>
 </ScrollView>

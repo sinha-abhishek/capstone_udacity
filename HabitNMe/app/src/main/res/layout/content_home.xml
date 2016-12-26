@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/home_page_list"
         android:paddingTop="20dp"
+        android:focusable="true"
         >
 
     </ListView>

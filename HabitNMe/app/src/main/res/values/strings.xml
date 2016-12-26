@@ -21,12 +21,12 @@
     <string name="select_type_string">Select type of habit \nYes/No - simple yes or no is success \n Number - Have x amount in a day</string>
     <string name="yes_no_text">Yes/No Habit</string>
     <string name="number_based_text">Number based</string>
-    <string name="add_habit_hint_yes_no">Habits can be tracked by simple yes no\nFor ex: go or don\'t go to gym, eat or avoid sugar etc.</string>
+    <string name="add_habit_hint_yes_no">For ex: go or don\'t go to gym, eat or avoid sugar etc.</string>
     <string name="times_a_week_string">times per week</string>
     <string name="i_want_to_text">I want to</string>
     <string name="action_verb_hint">ex. do/drink/eat/consume</string>
-    <string name="number_habit_hint">coffee/sugar/walk</string>
-    <string name="number_habit_metric_hint">times/grams/minutes/steps</string>
+    <string name="number_habit_hint">ex coffee/sugar/walk</string>
+    <string name="number_habit_metric_hint">ex times/grams/minutes/steps</string>
     <string name="everday_text">Everyday</string>
     <string name="submit_text">Submit</string>
     <string name="add_success">Habit created successfully</string>
@@ -76,5 +76,15 @@
     <string name="empty_string">No habits due</string>
     <string name="missed_text">Missed</string>
     <string name="delete_text">Delete habit</string>
+    <string name="enter_name_text">Enter Name</string>
+    <string name="select_metric">select metric</string>
+    <string name="select_want_not_want">Select you want or not want to do</string>
+    <string name="nav_hint">Navigation bar open</string>
+    <string name="logo">Logo</string>
+    <string name="month_view">View for this month</string>
+    <string name="select_goal">Select goal to see</string>
+    <string name="add_habit_hint">Add Habit</string>
+    <string name="set_done_for">Set done for date</string>
+    <string name="set_day_count">Set count for day</string>
 
 </resources>
