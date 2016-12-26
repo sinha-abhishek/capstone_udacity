@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#09C"
+    android:background="#ABBEC8"
     android:padding="@dimen/widget_margin">
 
     <ListView
@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:background="#09C"
+        android:background="#ABBEC8"
         android:contentDescription="@string/appwidget_text"
         android:text="@string/appwidget_text"
         android:textColor="#ffffff"
@@ -25,7 +25,8 @@
         android:gravity="center"
         android:text="@string/empty_string"
         android:textColor="#ffffff"
-        android:textSize="20sp"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
         android:visibility="gone" />
 
 </LinearLayout>

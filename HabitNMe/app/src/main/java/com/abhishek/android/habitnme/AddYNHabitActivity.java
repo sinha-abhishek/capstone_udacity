@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -34,10 +35,19 @@ public class AddYNHabitActivity extends NucleusAppCompatActivity<AddHabitPresent
     Spinner numTimesAWeekSelectionSpinner;
     @BindView(R.id.btn_submit_habit)
     AppCompatButton saveHabit;
+    @BindView(R.id.habit_edit_view)
+    LinearLayout habitEditView;
 
     String category;
     String yesNoAction;
     int numTimesAWeek;
+
+    long intentId ;
+    String intentName;
+    int intentTimesAWeek;
+    int intentMin;
+    int intentMax;
+    String intentDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +66,32 @@ public class AddYNHabitActivity extends NucleusAppCompatActivity<AddHabitPresent
                 R.layout.spinner_text_layout);
         adapter2.setDropDownViewResource(R.layout.spinner_text_layout);
         numTimesAWeekSelectionSpinner.setAdapter(adapter2);
+
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("isEdit", false)) {
+            intentId = intent.getLongExtra(HabitDataProvider.ID, 0);
+            intentName = intent.getStringExtra(HabitDataProvider.NAME);
+            intentTimesAWeek = intent.getIntExtra(HabitDataProvider.TIMESAWEEK, 0);
+            intentMin = intent.getIntExtra(HabitDataProvider.MIN_ALLOWED, 0);
+            intentMax = intent.getIntExtra(HabitDataProvider.MAX_ALLOWED, 0);
+            intentDesc = intent.getStringExtra(HabitDataProvider.DESCRIPTION);
+            habitEditView.setVisibility(View.VISIBLE);
+            saveHabit.setVisibility(View.GONE);
+            habitName.setText(intentName);
+            if (intentMin == 0) {
+                yesNoActionSelectionSpinner.setSelection(1);
+            } else {
+                yesNoActionSelectionSpinner.setSelection(0);
+            }
+            numTimesAWeekSelectionSpinner.setSelection(intentTimesAWeek - 1);
+            String action = yesNoActionSelectionSpinner.getSelectedItem().toString();
+            String description = intentDesc.substring(action.length());
+            description = description.substring(0, description.indexOf(String.valueOf(intentTimesAWeek)));
+            yesNoHabitDescription.setText(description);
+        } else {
+            habitEditView.setVisibility(View.GONE);
+            saveHabit.setVisibility(View.VISIBLE);
+        }
 
         yesNoActionSelectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -117,5 +153,38 @@ public class AddYNHabitActivity extends NucleusAppCompatActivity<AddHabitPresent
         Intent i = new Intent(this, HomeActivity.class);
         startActivity(i);
         finishAffinity();
+    }
+
+    @OnClick(R.id.btn_delete_habit)
+    public void deleteHabit() {
+        getPresenter().delete(intentId);
+    }
+
+    @OnClick(R.id.btn_done_habit)
+    public void onEditClick() {
+        if(habitName.getText().toString().isEmpty()) {
+            Toast.makeText(this, getString(R.string.please_enter_name), Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (yesNoAction.isEmpty() || numTimesAWeek <= 0) {
+            Toast.makeText(this, getString(R.string.please_select), Toast.LENGTH_LONG).show();
+            return;
+        }
+        String name = habitName.getText().toString();
+        long dateAdded = (new Date()).getTime();
+        int type = HabitModel.YES_NO;
+        String description;
+        int timesAWeekToDo;
+        int minAllowed;
+        int maxAllowed;
+        String action = getResources().getStringArray(R.array.yes_no_selector_array)[0];
+        timesAWeekToDo = numTimesAWeek;
+        description = yesNoAction + " " + yesNoHabitDescription.getText().toString() + " "+ numTimesAWeek + " "+getString(R.string.num_times_a_week_text);
+        if (yesNoAction.equals(action)) {
+            minAllowed = maxAllowed = 1;
+        } else {
+            minAllowed = maxAllowed = 0;
+        }
+        getPresenter().updateHabit(intentId, name, dateAdded, category, description, maxAllowed, minAllowed, type, timesAWeekToDo);
     }
 }

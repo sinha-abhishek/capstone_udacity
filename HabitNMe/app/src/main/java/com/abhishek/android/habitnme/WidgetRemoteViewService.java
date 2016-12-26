@@ -71,7 +71,7 @@ public class WidgetRemoteViewService extends RemoteViewsService {
                 Realm realm = Realm.getInstance(Utils.getInstance().getRealmConfiguration());
                 List<HabitDayLog> todayLogs = realm.where(HabitDayLog.class)
                         .equalTo("habitModel.id", habitModel.getId())
-                        .equalTo("yyyy", calendar.get(Calendar.DATE))
+                        .equalTo("yyyy", calendar.get(Calendar.YEAR))
                         .equalTo("dayOfYear", calendar.get(Calendar.DAY_OF_YEAR))
                         .findAll();
                 if (todayLogs.isEmpty() || todayLogs.get(0).getState() == HabitDayLog.STATE_UNTRACKED) {
@@ -80,6 +80,15 @@ public class WidgetRemoteViewService extends RemoteViewsService {
                     isDone = true;
                 }
                 remoteViews.setTextViewText(R.id.widget_item_text, name);
+                if (isDone) {
+                    if (todayLogs.get(0).getState() == HabitDayLog.STATE_MISSED) {
+                        remoteViews.setTextViewText(R.id.widget_item_check, getString(R.string.missed_text));
+                    } else {
+                        remoteViews.setTextViewText(R.id.widget_item_check, getString(R.string.done_text));
+                    }
+                } else {
+                    remoteViews.setTextViewText(R.id.widget_item_check, getString(R.string.notdone_text));
+                }
                 Intent fillInIntent = new Intent();
                 //fillInIntent.putExtra(, position);
                 remoteViews.setOnClickFillInIntent(R.id.widget_item_text, fillInIntent);

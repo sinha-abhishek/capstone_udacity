@@ -33,6 +33,7 @@
     <string name="edit_habit">Edit Habit</string>
     <string name="view_progress">View Progress</string>
     <string name="done_text">Done</string>
+    <string name="notdone_text">Not Done</string>
     <string name="set_count">Set Count</string>
     <string name="set_number_text">Set current number</string>
     <string name="set_number_text_example">Such habits require specific number.\\nFor ex: less than 2 cups of tea,eat veggies twice a day</string>
@@ -73,5 +74,7 @@
     <string name="appwidget_text">Widget for habits</string>
     <string name="add_widget">Add widget</string>
     <string name="empty_string">No habits due</string>
+    <string name="missed_text">Missed</string>
+    <string name="delete_text">Delete habit</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -40,6 +41,16 @@ public class AddNumberActivity extends NucleusAppCompatActivity<AddHabitPresente
     protected String category;
     protected String numberAction;
 
+    @BindView(R.id.habit_edit_view)
+    LinearLayout habitEditView;
+
+    long intentId ;
+    String intentName;
+    int intentTimesAWeek;
+    int intentMin;
+    int intentMax;
+    String intentDesc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +75,41 @@ public class AddNumberActivity extends NucleusAppCompatActivity<AddHabitPresente
 
             }
         });
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("isEdit", false)) {
+            intentId = intent.getLongExtra(HabitDataProvider.ID, 0);
+            intentName = intent.getStringExtra(HabitDataProvider.NAME);
+            intentTimesAWeek = intent.getIntExtra(HabitDataProvider.TIMESAWEEK, 0);
+            intentMin = intent.getIntExtra(HabitDataProvider.MIN_ALLOWED, 0);
+            intentMax = intent.getIntExtra(HabitDataProvider.MAX_ALLOWED, 0);
+            intentDesc = intent.getStringExtra(HabitDataProvider.DESCRIPTION);
+            habitEditView.setVisibility(View.VISIBLE);
+            saveHabit.setVisibility(View.GONE);
+            habitName.setText(intentName);
+            if (intentMin == 0) {
+                numberHabitXCount.setText(String.valueOf(intentMax));
+                numberActionSelectorSpinner.setSelection(1);
+            } else if (intentMax == intentMin){
+                numberHabitXCount.setText(String.valueOf(intentMax));
+                numberActionSelectorSpinner.setSelection(2);
+            } else {
+                numberHabitXCount.setText(String.valueOf(intentMin));
+                numberActionSelectorSpinner.setSelection(0);
+            }
+            String metric = numberActionSelectorSpinner.getSelectedItem().toString();
+            String action = intentDesc.substring(0, intentDesc.indexOf(metric));
+            actionVerbText.setText(action);
+
+            String description = intentDesc.substring(action.length());
+            description = description.substring(metric.length());
+            String number = numberHabitXCount.getText().toString();
+            description = description.substring(number.length());
+            //description = description.substring(0, description.indexOf(String.valueOf(getString(R.string.everday_text))));
+            numberHabitXMetric.setText(description);
+        } else {
+            habitEditView.setVisibility(View.GONE);
+            saveHabit.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -101,6 +147,38 @@ public class AddNumberActivity extends NucleusAppCompatActivity<AddHabitPresente
 
     }
 
+    @OnClick(R.id.btn_done_habit)
+    public void onEditClick() {
+        int type =  HabitModel.NUMBER_BASED;
+        String name = habitName.getText().toString();
+        long dateAdded = (new Date()).getTime();
+        String description;
+        int timesAWeekToDo = 7;
+        int minAllowed;
+        int maxAllowed;
+        if (name.isEmpty()) {
+            Toast.makeText(this, getString(R.string.please_enter_name), Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (actionVerbText.getText().toString().isEmpty() || numberHabitXCount.getText().toString().isEmpty()
+                || numberHabitXMetric.getText().toString().isEmpty() || numberAction.isEmpty()) {
+            Toast.makeText(this, getString(R.string.please_fill_fields), Toast.LENGTH_LONG).show();
+            return;
+        }
+        description = actionVerbText.getText().toString() + " "+ numberAction+ " " +
+                numberHabitXCount.getText().toString()  +
+                numberHabitXMetric.getText().toString();
+        if (numberAction.equals(getResources().getStringArray(R.array.metric_selection_array)[0])) {
+            minAllowed = Integer.parseInt(numberHabitXCount.getText().toString());
+            maxAllowed = (1+minAllowed)*1000;
+        } else if(numberAction.equals(getResources().getStringArray(R.array.metric_selection_array)[2])) {
+            minAllowed = maxAllowed = Integer.parseInt(numberHabitXCount.getText().toString());
+        } else {
+            maxAllowed = Integer.parseInt(numberHabitXCount.getText().toString());
+            minAllowed = 0;
+        }
+        getPresenter().updateHabit(intentId, name, dateAdded, category, description, maxAllowed, minAllowed, type, timesAWeekToDo);
+    }
 
     @Override
     public void onHabitAdded(boolean isSuccess) {
@@ -108,5 +186,10 @@ public class AddNumberActivity extends NucleusAppCompatActivity<AddHabitPresente
         Intent i = new Intent(this, HomeActivity.class);
         startActivity(i);
         finishAffinity();
+    }
+
+    @OnClick(R.id.btn_delete_habit)
+    public void deleteHabit() {
+        getPresenter().delete(intentId);
     }
 }

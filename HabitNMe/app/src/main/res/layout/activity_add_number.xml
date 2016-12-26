@@ -94,5 +94,36 @@
         android:padding="12dp"
         style="@style/Base.Widget.AppCompat.Button.Colored"
         android:text="@string/submit_text"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/habit_edit_view"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:padding="12dp"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            >
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_delete_habit"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:padding="12dp"
+                style="@style/Base.Widget.AppCompat.Button.Colored"
+                android:text="@string/delete_text"/>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_done_habit"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:padding="12dp"
+                style="@style/Base.Widget.AppCompat.Button.Colored"
+                android:text="@string/done_text"/>
+        </LinearLayout>
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

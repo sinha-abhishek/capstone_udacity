@@ -15,6 +15,8 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.abhishek.android.habitnme.AddNumberActivity;
+import com.abhishek.android.habitnme.AddYNHabitActivity;
 import com.abhishek.android.habitnme.BaseApplication;
 import com.abhishek.android.habitnme.HabitDataProvider;
 import com.abhishek.android.habitnme.ProgressActivity;
@@ -40,6 +42,8 @@ import static com.abhishek.android.habitnme.models.HabitDayLog.STATE_MISSED;
 
 
 public class HabitLogAdapter extends CursorAdapter {
+
+
     @Inject
     protected RealmConfiguration realmConfiguration;
 
@@ -56,12 +60,16 @@ public class HabitLogAdapter extends CursorAdapter {
         return view;
     }
 
-    private void formRow(ViewHolder viewHolder, final long habitId, final int max, final int min, int type, int timesAWeek, final Context context) {
+    private void formRow(ViewHolder viewHolder, final long habitId, final int max, final int min, final int type, int timesAWeek, final Context context) {
         int successCount = 0;
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         List<TextView> labels = viewHolder.dayTexts;
         final Realm realm = Realm.getInstance(realmConfiguration);
+        final HabitModel model = realm.where(HabitModel.class).equalTo("id", habitId).findFirst();
+        if (model == null) {
+            return;
+        }
         for (int i = 0 ; i <7 ; i++) {
             TextView label = labels.get(i);
             label.setText(String.valueOf(calendar.get(Calendar.DATE)));
@@ -197,6 +205,33 @@ public class HabitLogAdapter extends CursorAdapter {
                     context.startActivity(intent);
                 }
             });
+        viewHolder.goalEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                if (type == HabitModel.YES_NO) {
+                    intent = new Intent(context, AddYNHabitActivity.class);
+                    intent.putExtra(HabitDataProvider.ID, habitId);
+                    intent.putExtra(HabitDataProvider.NAME, model.getName());
+                    intent.putExtra(HabitDataProvider.DESCRIPTION, model.getDescription());
+                    intent.putExtra(HabitDataProvider.TIMESAWEEK, model.getTimesAWeek());
+                    intent.putExtra(HabitDataProvider.MAX_ALLOWED, model.getMaxAllowed());
+                    intent.putExtra(HabitDataProvider.MIN_ALLOWED, model.getMinAllowed());
+                    intent.putExtra("isEdit", true);
+                    context.startActivity(intent);
+                } else {
+                    intent = new Intent(context, AddNumberActivity.class);
+                    intent.putExtra(HabitDataProvider.ID, habitId);
+                    intent.putExtra(HabitDataProvider.NAME, model.getName());
+                    intent.putExtra(HabitDataProvider.DESCRIPTION, model.getDescription());
+                    intent.putExtra(HabitDataProvider.TIMESAWEEK, model.getTimesAWeek());
+                    intent.putExtra(HabitDataProvider.MAX_ALLOWED, model.getMaxAllowed());
+                    intent.putExtra(HabitDataProvider.MIN_ALLOWED, model.getMinAllowed());
+                    intent.putExtra("isEdit", true);
+                    context.startActivity(intent);
+                }
+            }
+        });
         float percent = ((float)successCount/timesAWeek)*100;
         TextView goalPercent = viewHolder.goalPercent;
         goalPercent.setText(String.valueOf(percent)+ "%");
@@ -204,16 +239,25 @@ public class HabitLogAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
-        ViewHolder holder = new ViewHolder(view);
-        TextView title = holder.goalName;
-        String titleText = cursor.getString(cursor.getColumnIndex(HabitDataProvider.NAME));
-        title.setText(titleText);
+
+
         final Realm realm = Realm.getInstance(realmConfiguration);
+
         int id = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.ID));
         final int max = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.MAX_ALLOWED));
         final int min = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.MIN_ALLOWED));
         int type = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.TYPE));
         int timesAweek = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.TIMESAWEEK));
+
+        HabitModel model = realm.where(HabitModel.class).equalTo("id", id).findFirst();
+        if (model == null) {
+            view.setVisibility(View.GONE);
+            return;
+        }
+        ViewHolder holder = new ViewHolder(view);
+        TextView title = holder.goalName;
+        String titleText = cursor.getString(cursor.getColumnIndex(HabitDataProvider.NAME));
+        title.setText(titleText);
         final List<HabitDayLog> habitDayLogs = realm.where(HabitDayLog.class).equalTo("habitModel.id", id)
                 .findAllSorted("dayOfYear", Sort.DESCENDING);
         formRow(holder, id,max, min, type, timesAweek, context);
