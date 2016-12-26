@@ -6,13 +6,22 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SyncResult;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.abhishek.android.habitnme.BaseApplication;
 import com.abhishek.android.habitnme.models.HabitDayLog;
 import com.abhishek.android.habitnme.models.HabitModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -67,8 +76,33 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             }
         }
+
         realm.commitTransaction();
         realm.close();
+        String path = realm.getPath();
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        Uri file = Uri.fromFile(new File(path));
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            String storagePath = "/data/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/"+(new File(path)).getName();
+            StorageReference riversRef = storageRef.child(storagePath);
+            Log.i("SyncAdapter", "Path1: " + path);
+            riversRef.putFile(file)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get a URL to the uploaded content
+                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            // ...
+                        }
+                    });
+        }
+        Log.i("SyncAdapter", "Path: "+ path);
 
     }
 }

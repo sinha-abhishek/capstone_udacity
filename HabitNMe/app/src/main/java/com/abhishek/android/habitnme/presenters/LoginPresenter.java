@@ -8,12 +8,21 @@ import android.widget.Toast;
 import com.abhishek.android.habitnme.BaseApplication;
 import com.abhishek.android.habitnme.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import nucleus.presenter.RxPresenter;
 import rx.Observable;
 import rx.Subscriber;
@@ -28,6 +37,9 @@ public class LoginPresenter extends RxPresenter<LoginActivity> {
 
     @Inject
     protected Context context;
+
+    @Inject
+    RealmConfiguration realmConfiguration;
 
     private static int LOGIN_REQ = 1;
 
@@ -74,8 +86,29 @@ public class LoginPresenter extends RxPresenter<LoginActivity> {
             }
         }, new Action2<LoginActivity, Boolean>() {
             @Override
-            public void call(LoginActivity loginActivity, Boolean aBoolean) {
-                loginActivity.onLoginResult(aBoolean);
+            public void call(final LoginActivity loginActivity, final Boolean aBoolean) {
+                if (aBoolean) {
+                    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                    Realm realm = Realm.getInstance(realmConfiguration);
+                    String path = realm.getPath();
+                    realm.close();
+                    String storagePath = "/data/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/" + (new File(path)).getName();
+                    StorageReference riversRef = storageRef.child(storagePath);
+                    riversRef.getFile(new File(path)).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            //Toast.makeText(context, "DONE restore").show();
+                            loginActivity.onLoginResult(aBoolean);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+                } else {
+                    loginActivity.onLoginResult(aBoolean);
+                }
             }
         }, new Action2<LoginActivity, Throwable>() {
             @Override

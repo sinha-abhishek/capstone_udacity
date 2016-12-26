@@ -52,6 +52,7 @@ public class RegisterPresenter extends RxPresenter<RegisterActivity> {
             @Override
             public void call(RegisterActivity registerActivity, Boolean aBoolean) {
                 if (aBoolean) {
+
                     registerActivity.onRegisterSuccess();
                 } else {
                     registerActivity.onRegisterFail();
@@ -69,6 +70,33 @@ public class RegisterPresenter extends RxPresenter<RegisterActivity> {
     private void register(final String name, String email, String password, final Subscriber<? super Boolean> resultSub) {
          FirebaseAuth mAuth =  FirebaseAuth.getInstance();
          //final boolean result = false;
+         mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+             @Override
+             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                 FirebaseUser user = firebaseAuth.getCurrentUser();
+                 if(user!=null){
+                     UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                             .setDisplayName(name).build();
+                     user.updateProfile(profileChangeRequest)
+                             .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                 @Override
+                                 public void onComplete(@NonNull Task<Void> task) {
+                                     if (!task.isSuccessful()) {
+                                         Toast.makeText(context, "Authentication failed.",
+                                                 Toast.LENGTH_SHORT).show();
+                                         resultSub.onNext(false);
+                                         resultSub.onCompleted();
+                                     } else {
+                                         Toast.makeText(context, "User created succesfully.",
+                                                 Toast.LENGTH_SHORT).show();
+                                         resultSub.onNext(true);
+                                         resultSub.onCompleted();
+                                     }
+                                 }
+                             });
+                 }
+             }
+         });
          mAuth.createUserWithEmailAndPassword(email, password)
                  .addOnFailureListener(new OnFailureListener() {
                      @Override
@@ -91,26 +119,9 @@ public class RegisterPresenter extends RxPresenter<RegisterActivity> {
                              resultSub.onCompleted();
                              return;
                          }
-                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                         UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
-                                 .setDisplayName(name).build();
-                         user.updateProfile(profileChangeRequest)
-                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                     @Override
-                                     public void onComplete(@NonNull Task<Void> task) {
-                                         if (!task.isSuccessful()) {
-                                             Toast.makeText(context, "Authentication failed.",
-                                                     Toast.LENGTH_SHORT).show();
-                                             resultSub.onNext(false);
-                                             resultSub.onCompleted();
-                                         } else {
-                                             Toast.makeText(context, "User created succesfully.",
-                                                     Toast.LENGTH_SHORT).show();
-                                             resultSub.onNext(true);
-                                             resultSub.onCompleted();
-                                         }
-                                     }
-                                 });
+
+                         FirebaseUser user =task.getResult().getUser();
+
                          //FirebaseAuth.getInstance().
 
 

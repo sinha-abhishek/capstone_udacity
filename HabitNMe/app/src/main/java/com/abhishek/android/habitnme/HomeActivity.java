@@ -211,6 +211,10 @@ public class HomeActivity extends NucleusAppCompatActivity<HomePagePresenter>
             Intent intent = new Intent(this, ProgressActivity.class);
             startActivity(intent);
         }
+        if (id == R.id.nav_profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        }
 //        if (id == R.id.nav_camera) {
 //            // Handle the camera action
 //        } else if (id == R.id.nav_gallery) {

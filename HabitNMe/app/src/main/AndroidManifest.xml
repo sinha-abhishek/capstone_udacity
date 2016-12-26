@@ -78,8 +78,12 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/habit_app_widget_info" />
         </receiver>
-        <service android:name=".WidgetRemoteViewService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <service
+            android:name=".WidgetRemoteViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>

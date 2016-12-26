@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.abhishek.android.habitnme.modules.DaggerDataComponent;
 import com.abhishek.android.habitnme.modules.DataComponent;
 import com.abhishek.android.habitnme.modules.DataModules;
+import com.google.firebase.FirebaseApp;
 
 import io.realm.Realm;
 
@@ -24,6 +25,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         dataComponent = DaggerDataComponent.builder()
                 .dataModules(new DataModules(getApplicationContext())).build();
+        FirebaseApp.initializeApp(this);
         Realm.init(this);
 
     }

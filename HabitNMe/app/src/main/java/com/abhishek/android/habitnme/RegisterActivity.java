@@ -64,7 +64,9 @@ public class RegisterActivity extends NucleusAppCompatActivity<RegisterPresenter
     }
 
     public void onRegisterSuccess() {
-
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+        finishAffinity();
     }
 
     public void onRegisterFail() {
