@@ -53,10 +53,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         if (realmConfiguration == null) {
             BaseApplication.getDataComponent().inject(this);
         }
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            return;
+        }
         Realm realm = Realm.getInstance(realmConfiguration);
+        if (realm.isEmpty()) {
+            return;
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
-        List<HabitModel> allHabits = realm.where(HabitModel.class).findAll();
+        List<HabitModel> allHabits = realm.where(HabitModel.class)
+                .equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .findAll();
         realm.beginTransaction();
         for (HabitModel habitModel:
              allHabits) {
@@ -78,11 +86,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         realm.commitTransaction();
-        realm.close();
-        String path = realm.getPath();
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        Uri file = Uri.fromFile(new File(path));
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null && realm.where(HabitModel.class)
+                .equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid()).count() > 0) {
+            String path = realm.getPath();
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            Uri file = Uri.fromFile(new File(path));
             String storagePath = "/data/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/"+(new File(path)).getName();
             StorageReference riversRef = storageRef.child(storagePath);
             Log.i("SyncAdapter", "Path1: " + path);
@@ -101,8 +111,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             // ...
                         }
                     });
+            Log.i("SyncAdapter", "Path: "+ path);
         }
-        Log.i("SyncAdapter", "Path: "+ path);
+        realm.close();
 
     }
 }

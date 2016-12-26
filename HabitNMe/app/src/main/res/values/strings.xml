@@ -86,5 +86,6 @@
     <string name="add_habit_hint">Add Habit</string>
     <string name="set_done_for">Set done for date</string>
     <string name="set_day_count">Set count for day</string>
+    <string name="action_logout">logout</string>
 
 </resources>

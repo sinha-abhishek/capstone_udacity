@@ -43,7 +43,7 @@ public class LoginPresenter extends RxPresenter<LoginActivity> {
 
     private static int LOGIN_REQ = 1;
 
-    LoginPresenter() {
+    public LoginPresenter() {
         BaseApplication.getDataComponent().inject(this);
     }
 
@@ -98,12 +98,18 @@ public class LoginPresenter extends RxPresenter<LoginActivity> {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             //Toast.makeText(context, "DONE restore").show();
-                            loginActivity.onLoginResult(aBoolean);
+                            //loginActivity.onLoginResult(aBoolean);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            Log.e(LoginPresenter.class.getSimpleName(), e.getMessage());
 
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<FileDownloadTask.TaskSnapshot> task) {
+                            loginActivity.onLoginResult(aBoolean);
                         }
                     });
                 } else {

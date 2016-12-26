@@ -25,11 +25,19 @@ import android.widget.ListView;
 
 import com.abhishek.android.habitnme.adapters.GoalDataAdapter;
 import com.abhishek.android.habitnme.adapters.HabitLogAdapter;
+import com.abhishek.android.habitnme.models.HabitDayLog;
+import com.abhishek.android.habitnme.models.HabitModel;
 import com.abhishek.android.habitnme.presenters.HomePagePresenter;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import nucleus.factory.RequiresPresenter;
 import nucleus.view.NucleusAppCompatActivity;
 
@@ -38,6 +46,9 @@ public class HomeActivity extends NucleusAppCompatActivity<HomePagePresenter>
         implements NavigationView.OnNavigationItemSelectedListener {
 
     HabitLogAdapter habitLogAdapter;
+
+    @Inject
+    RealmConfiguration realmConfiguration;
 
     public static final String AUTHORITY = "com.abhishek.android.habitnme.provider";
     // An authenticator type, in the form of a domain name
@@ -48,6 +59,10 @@ public class HomeActivity extends NucleusAppCompatActivity<HomePagePresenter>
     public static final long SYNC_INTERVAL = 30;
     // Instance fields
     Account mAccount;
+
+    public HomeActivity() {
+        BaseApplication.getDataComponent().inject(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +211,11 @@ public class HomeActivity extends NucleusAppCompatActivity<HomePagePresenter>
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+            finishAffinity();
+            //Realm.init(this);
             return true;
         }
 

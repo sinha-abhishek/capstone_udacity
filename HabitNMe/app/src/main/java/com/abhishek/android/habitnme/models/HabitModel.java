@@ -1,6 +1,8 @@
 package com.abhishek.android.habitnme.models;
 
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import io.realm.RealmModel;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -16,6 +18,7 @@ public class HabitModel extends RealmObject {
     private int timesAWeek;
     private int minAllowed;
     private int maxAllowed;
+    private String uuid;
 
     public static final int YES_NO = 1;
     public static final int NUMBER_BASED = 2;
@@ -33,6 +36,7 @@ public class HabitModel extends RealmObject {
         this.name = name;
         this.timesAWeek = timesAWeek;
         this.type = type;
+        uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     public long getDataAdded() {
@@ -105,5 +109,13 @@ public class HabitModel extends RealmObject {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

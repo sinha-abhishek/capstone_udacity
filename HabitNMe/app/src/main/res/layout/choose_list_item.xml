@@ -4,7 +4,6 @@
     android:layout_margin="0dp"
     android:padding="5dp"
     android:background="@color/colorPrimaryDark"
-    android:focusable="true"
     android:layout_height="match_parent">
     <ImageView
         android:layout_width="0dp"

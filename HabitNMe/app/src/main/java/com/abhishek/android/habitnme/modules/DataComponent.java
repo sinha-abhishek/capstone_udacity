@@ -1,6 +1,7 @@
 package com.abhishek.android.habitnme.modules;
 
 import com.abhishek.android.habitnme.HabitDataProvider;
+import com.abhishek.android.habitnme.HomeActivity;
 import com.abhishek.android.habitnme.LoginActivity;
 import com.abhishek.android.habitnme.Utils;
 import com.abhishek.android.habitnme.adapters.CategoryListAdapter;
@@ -31,4 +32,5 @@ public interface DataComponent {
     void inject(ProgressPresenter progressPresenter);
     void inject(SyncAdapter syncAdapter);
     void inject(Utils utils);
+    void inject(HomeActivity homeActivity);
 }

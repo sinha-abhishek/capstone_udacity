@@ -69,6 +69,7 @@ public class LoginActivity extends NucleusAppCompatActivity<LoginPresenter> {
         if (result) {
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
+            finishAffinity();
         }
     }
 

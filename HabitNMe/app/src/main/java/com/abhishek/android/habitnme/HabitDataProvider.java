@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 
 import com.abhishek.android.habitnme.models.HabitDayLog;
 import com.abhishek.android.habitnme.models.HabitModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -113,7 +114,8 @@ public class HabitDataProvider extends ContentProvider {
         Cursor result = null;
         switch (uriMatcher.match(uri)) {
             case HABIT_ALL:
-                List<HabitModel> allModels = realm.where(HabitModel.class).findAll();
+                List<HabitModel> allModels = realm.where(HabitModel.class).
+                        equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid()).findAll();
                 result = toCursor(allModels);
                 break;
             case HABIT_ONE_ID:
@@ -121,7 +123,9 @@ public class HabitDataProvider extends ContentProvider {
                 result = toCursor(modelsWithId);
                 break;
             case HABIT_CATEGORY:
-                List<HabitModel> modelsWithCategory = realm.where(HabitModel.class).equalTo("category",uri.getPathSegments().get(1)).findAll();
+                List<HabitModel> modelsWithCategory = realm.where(HabitModel.class).
+                        equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                        equalTo("category",uri.getPathSegments().get(1)).findAll();
                 result = toCursor(modelsWithCategory);
                 break;
             case HABIT_ONE_NAME:

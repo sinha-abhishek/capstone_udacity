@@ -23,6 +23,7 @@ import com.abhishek.android.habitnme.ProgressActivity;
 import com.abhishek.android.habitnme.R;
 import com.abhishek.android.habitnme.models.HabitDayLog;
 import com.abhishek.android.habitnme.models.HabitModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,7 +67,9 @@ public class HabitLogAdapter extends CursorAdapter {
         calendar.setTime(new Date());
         List<TextView> labels = viewHolder.dayTexts;
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final HabitModel model = realm.where(HabitModel.class).equalTo("id", habitId).findFirst();
+        final HabitModel model = realm.where(HabitModel.class)
+                .equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .equalTo("id", habitId).findFirst();
         if (model == null) {
             return;
         }
@@ -251,7 +254,9 @@ public class HabitLogAdapter extends CursorAdapter {
         int type = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.TYPE));
         int timesAweek = cursor.getInt(cursor.getColumnIndex(HabitDataProvider.TIMESAWEEK));
 
-        HabitModel model = realm.where(HabitModel.class).equalTo("id", id).findFirst();
+        HabitModel model = realm.where(HabitModel.class)
+                .equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .equalTo("id", id).findFirst();
         if (model == null) {
             view.setVisibility(View.GONE);
             return;

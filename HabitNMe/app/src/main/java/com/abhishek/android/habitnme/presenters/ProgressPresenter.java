@@ -6,6 +6,7 @@ import com.abhishek.android.habitnme.BaseApplication;
 import com.abhishek.android.habitnme.ProgressActivity;
 import com.abhishek.android.habitnme.models.HabitDayLog;
 import com.abhishek.android.habitnme.models.HabitModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -137,7 +138,9 @@ public class ProgressPresenter extends RxPresenter<ProgressActivity> {
 
     protected List<HabitModel> getAllHabits() {
         Realm realm = Realm.getInstance(realmConfiguration);
-        List<HabitModel> realmModels = realm.where(HabitModel.class).findAll();
+        List<HabitModel> realmModels = realm.where(HabitModel.class)
+                .equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .findAll();
         List<HabitModel> allHabits = realm.copyFromRealm(realmModels);
         realm.close();
         return  allHabits;

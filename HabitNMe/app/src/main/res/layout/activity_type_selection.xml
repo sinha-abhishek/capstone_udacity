@@ -40,8 +40,8 @@
         style="@style/Base.Widget.AppCompat.Button.Colored"
         android:focusable="true"
         android:id="@+id/number_button"
-        android:contentDescription="@string/number_based_text"
-        android:text="@string/set_number_text_example"/>
+        android:text="@string/number_based_text"
+        android:contentDescription="@string/set_number_text_example"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -8,6 +8,7 @@ import android.widget.RemoteViewsService;
 
 import com.abhishek.android.habitnme.models.HabitDayLog;
 import com.abhishek.android.habitnme.models.HabitModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,7 +31,9 @@ public class WidgetRemoteViewService extends RemoteViewsService {
             @Override
             public void onCreate() {
                 Realm realm = Realm.getInstance(Utils.getInstance().getRealmConfiguration());
-                List<HabitModel> habitModels = realm.where(HabitModel.class).findAllSorted("dataAdded");
+                List<HabitModel> habitModels = realm.where(HabitModel.class)
+                        .equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .findAllSorted("dataAdded");
                 allHabits = realm.copyFromRealm(habitModels);
                 realm.close();
             }
@@ -40,7 +43,9 @@ public class WidgetRemoteViewService extends RemoteViewsService {
                 long identityToken = Binder.clearCallingIdentity();
                 Binder.restoreCallingIdentity(identityToken);
                 Realm realm = Realm.getInstance(Utils.getInstance().getRealmConfiguration());
-                List<HabitModel> habitModels = realm.where(HabitModel.class).findAllSorted("dataAdded");
+                List<HabitModel> habitModels = realm.where(HabitModel.class)
+                        .equalTo("uuid", FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .findAllSorted("dataAdded");
                 allHabits = realm.copyFromRealm(habitModels);
                 realm.close();
             }
