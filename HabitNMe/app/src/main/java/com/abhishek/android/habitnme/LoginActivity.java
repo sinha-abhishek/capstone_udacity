@@ -55,11 +55,11 @@ public class LoginActivity extends NucleusAppCompatActivity<LoginPresenter> {
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
         if (email.length() == 0 ) {
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_email_text), Toast.LENGTH_SHORT).show();
             return;
         }
         if (password.length() == 0) {
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_pass_text), Toast.LENGTH_SHORT).show();
             return;
         }
         getPresenter().startLogin(email, password);
@@ -77,7 +77,7 @@ public class LoginActivity extends NucleusAppCompatActivity<LoginPresenter> {
     public void onForgorPwdClick() {
         String email = inputEmail.getText().toString();
         if (email.length() == 0 ) {
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_email_text), Toast.LENGTH_SHORT).show();
             return;
         }
         getPresenter().forgotPasseord(email);

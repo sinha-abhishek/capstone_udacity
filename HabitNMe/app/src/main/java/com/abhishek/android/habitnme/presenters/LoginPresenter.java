@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.abhishek.android.habitnme.BaseApplication;
 import com.abhishek.android.habitnme.LoginActivity;
+import com.abhishek.android.habitnme.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,7 +60,7 @@ public class LoginPresenter extends RxPresenter<LoginActivity> {
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithEmail", task.getException());
-                            Toast.makeText(context, "Authentication failed.",
+                            Toast.makeText(context, context.getString(R.string.fail_auth),
                                     Toast.LENGTH_SHORT).show();
                             subscriber.onNext(false);
                             subscriber.onCompleted();

@@ -48,15 +48,15 @@ public class RegisterActivity extends NucleusAppCompatActivity<RegisterPresenter
         String password = inputPassword.getText().toString();
         String name = inputName.getText().toString();
         if (email.length() == 0 ) {
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_email_text), Toast.LENGTH_SHORT).show();
             return;
         }
         if (password.length() == 0) {
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_pass_text), Toast.LENGTH_SHORT).show();
             return;
         }
         if (name.length() == 0) {
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_name_text), Toast.LENGTH_SHORT).show();
             return;
         }
         getPresenter().startRegister(name, email, password);

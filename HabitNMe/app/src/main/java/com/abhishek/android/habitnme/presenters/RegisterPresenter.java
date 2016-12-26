@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.abhishek.android.habitnme.BaseApplication;
+import com.abhishek.android.habitnme.R;
 import com.abhishek.android.habitnme.RegisterActivity;
 import com.google.android.gms.common.api.BooleanResult;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -82,12 +83,12 @@ public class RegisterPresenter extends RxPresenter<RegisterActivity> {
                                  @Override
                                  public void onComplete(@NonNull Task<Void> task) {
                                      if (!task.isSuccessful()) {
-                                         Toast.makeText(context, "Authentication failed.",
+                                         Toast.makeText(context, context.getString(R.string.fail_auth),
                                                  Toast.LENGTH_SHORT).show();
                                          resultSub.onNext(false);
                                          resultSub.onCompleted();
                                      } else {
-                                         Toast.makeText(context, "User created succesfully.",
+                                         Toast.makeText(context, context.getString(R.string.user_success),
                                                  Toast.LENGTH_SHORT).show();
                                          resultSub.onNext(true);
                                          resultSub.onCompleted();
@@ -112,7 +113,7 @@ public class RegisterPresenter extends RxPresenter<RegisterActivity> {
                          // the auth state listener will be notified and logic to handle the
                          // signed in user can be handled in the listener.
                          if (!task.isSuccessful()) {
-                             Toast.makeText(context, "Authentication failed.",
+                             Toast.makeText(context, context.getString(R.string.fail_auth),
                                      Toast.LENGTH_SHORT).show();
 
                              resultSub.onNext(false);

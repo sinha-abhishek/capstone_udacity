@@ -87,5 +87,9 @@
     <string name="set_done_for">Set done for date</string>
     <string name="set_day_count">Set count for day</string>
     <string name="action_logout">logout</string>
+    <string name="enter_email_text">Please enter email</string>
+    <string name="enter_pass_text">Please enter password</string>
+    <string name="fail_auth">Authentication failed.</string>
+    <string name="user_success">User created succesfully.</string>
 
 </resources>

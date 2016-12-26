@@ -5,9 +5,9 @@ android {
     signingConfigs {
         config {
             keyAlias 'udacity'
-            keyPassword 'XXXXX'
-            storeFile file('$rootdir/testkey.jks')
-            storePassword 'XXXXX'
+            keyPassword 'password'
+            storeFile file('../testkey.jks')
+            storePassword 'password'
         }
     }
     compileSdkVersion 24
